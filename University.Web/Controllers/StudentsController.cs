@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Web.Mvc;
-using University.BL.Models;
-using University.BL.DTOs;
-using University.BL.Data;
+﻿using PagedList;
+using System;
 using System.Linq;
-using PagedList;
+using System.Web.Mvc;
+using University.BL.Data;
+using University.BL.DTOs;
+using University.BL.Models;
 
 namespace University.Web.Controllers
 {
@@ -17,7 +16,7 @@ namespace University.Web.Controllers
         [HttpGet]
         public ActionResult Index(int? studentId, int? pageSize, int? page)
         {
-            #region Listar estudiantes
+            #region Consulta Estudiante
             //SELECT * FROM Students
             var query = context.Students.ToList();
 
@@ -42,7 +41,7 @@ namespace University.Web.Controllers
                                 }).ToList();
             #endregion
 
-            #region Cursos asociados al estudiante
+            #region Lista cursos estudiantes
             if (studentId != null)
             {
                 //SELECT r.*
@@ -62,20 +61,19 @@ namespace University.Web.Controllers
 
                 ViewBag.Courses = courses;
             }
-            #endregion
-
-            ViewBag.Data = "Data de prueba";
-            ViewBag.Message = "Mensaje de prueba";
+            #endregion 
+            /*ViewBag.Data = "Data de prueba";
+            ViewBag.Message = "Mensaje de prueba";*/
 
             //ViewData["Data"] = "Data de prueba";
             //ViewData["Message"] = "Mensaje de prueba";
-
-            #region Paginación
+            #region Paginacion
+            //Si viene nulo dele 10 por defecto
             pageSize = (pageSize ?? 10);
+            //si viene igual por defecto llevelo a la 1 
             page = (page ?? 1);
-            ViewBag.PageSize = pageSize;
-            #endregion
-
+            ViewBag.pageSize = pageSize;
+            #endregion 
             return View(students.ToPagedList(page.Value, pageSize.Value));
         }
 
